@@ -142,28 +142,28 @@ public class RequestManager {
     final BaragonService service = request.getLoadBalancerService();
     final Map<String, String> loadBalancerServiceIds = Maps.newHashMap();
 
-    for (String loadBalancerGroup : service.getLoadBalancerGroups()) {
-      Optional<BaragonGroup> maybeGroup = loadBalancerDatastore.getLoadBalancerGroup(loadBalancerGroup);
-      for (String path : service.getAllPaths()) {
-        final Optional<String> maybeServiceIdForPath = loadBalancerDatastore.getBasePathServiceId(loadBalancerGroup, path);
-        if (maybeServiceIdForPath.isPresent() && !maybeServiceIdForPath.get().equals(service.getServiceId())) {
-          if (!request.getReplaceServiceId().isPresent() || (request.getReplaceServiceId().isPresent() && !request.getReplaceServiceId().get().equals(maybeServiceIdForPath.get()))) {
-            loadBalancerServiceIds.put(loadBalancerGroup, maybeServiceIdForPath.get());
-            continue;
-          }
-        }
-        if (!path.startsWith("/")) {
-          if (maybeGroup.isPresent() && maybeGroup.get().getDefaultDomain().isPresent() && path.startsWith(maybeGroup.get().getDefaultDomain().get())) {
-            Optional<String> maybeServiceForDefaultDomainPath = loadBalancerDatastore.getBasePathServiceId(loadBalancerGroup, path.replace(maybeGroup.get().getDefaultDomain().get(), ""));
-            if (maybeServiceForDefaultDomainPath.isPresent() && !maybeServiceForDefaultDomainPath.get().equals(service.getServiceId())) {
-              if (!request.getReplaceServiceId().isPresent() || (request.getReplaceServiceId().isPresent() && !request.getReplaceServiceId().get().equals(maybeServiceForDefaultDomainPath.get()))) {
-                loadBalancerServiceIds.put(loadBalancerGroup, maybeServiceForDefaultDomainPath.get());
-              }
-            }
-          }
-        }
-      }
-    }
+//    for (String loadBalancerGroup : service.getLoadBalancerGroups()) {
+//      Optional<BaragonGroup> maybeGroup = loadBalancerDatastore.getLoadBalancerGroup(loadBalancerGroup);
+//      for (String path : service.getAllPaths()) {
+//        final Optional<String> maybeServiceIdForPath = loadBalancerDatastore.getBasePathServiceId(loadBalancerGroup, path);
+//        if (maybeServiceIdForPath.isPresent() && !maybeServiceIdForPath.get().equals(service.getServiceId())) {
+//          if (!request.getReplaceServiceId().isPresent() || (request.getReplaceServiceId().isPresent() && !request.getReplaceServiceId().get().equals(maybeServiceIdForPath.get()))) {
+//            loadBalancerServiceIds.put(loadBalancerGroup, maybeServiceIdForPath.get());
+//            continue;
+//          }
+//        }
+//        if (!path.startsWith("/")) {
+//          if (maybeGroup.isPresent() && maybeGroup.get().getDefaultDomain().isPresent() && path.startsWith(maybeGroup.get().getDefaultDomain().get())) {
+//            Optional<String> maybeServiceForDefaultDomainPath = loadBalancerDatastore.getBasePathServiceId(loadBalancerGroup, path.replace(maybeGroup.get().getDefaultDomain().get(), ""));
+//            if (maybeServiceForDefaultDomainPath.isPresent() && !maybeServiceForDefaultDomainPath.get().equals(service.getServiceId())) {
+//              if (!request.getReplaceServiceId().isPresent() || (request.getReplaceServiceId().isPresent() && !request.getReplaceServiceId().get().equals(maybeServiceForDefaultDomainPath.get()))) {
+//                loadBalancerServiceIds.put(loadBalancerGroup, maybeServiceForDefaultDomainPath.get());
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }
 
     return loadBalancerServiceIds;
   }
